@@ -1,0 +1,23 @@
+package NettyDemo.bonree.service;
+
+import java.util.List;
+
+import NettyDemo.bonree.protobuf.tasks.PBMBTaskNavigateResult.PB_MBTaskNavigateResult;
+import NettyDemo.bonree.protobuf.tasks.PBMBTaskNetenvResult.PB_MBTaskNetenvResult;
+
+public class MbResultService {
+	
+	
+	public Iterable<? extends PB_MBTaskNetenvResult> getNetData(
+			List<String> taskList) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Iterable<? extends PB_MBTaskNavigateResult> getNavData(
+			List<String> taskList) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

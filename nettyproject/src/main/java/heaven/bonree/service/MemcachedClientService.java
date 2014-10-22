@@ -1,0 +1,44 @@
+package heaven.bonree.service;
+
+import heaven.bonree.domain.CacheItem;
+
+import com.schooner.MemCached.MemcachedItem;
+
+/*******************************************************************************
+ * 版权信息：博睿宏远科技发展有限公司
+ * Copyright: Copyright (c) 2007博睿宏远科技发展有限公司,Inc.All Rights Reserved.
+ * 
+ * BidPlanStructForm.java Created on 2014-4-15
+ * Author: <a href=mailto:wanghd@bonree.com>王厚达</a>
+ * @Title: MemcachedClientService.java
+ * @Package test.memcache.service
+ * Description:
+ * Version: 1.0
+ ******************************************************************************/
+public interface MemcachedClientService {
+		/***/
+		Object getMulti(String keys[]);
+		/***/
+		Object getUserData(String userId,String taskId,String timeStamp);
+		/***/
+		Object getUserData(String userId);
+		/***/
+		Object get(String key);  
+		/***/
+	    CacheItem getsCacheItem(String key);  
+	    /***/
+	    MemcachedItem getsMemcachedItem(String key);
+	    /***/
+	    boolean add(String key, Object value);  
+	    /***/
+	    boolean set(String key, String value);  
+	    /***/
+	    boolean cas(String key, String value, long unique);  
+	    /***/ 
+	    boolean delete(String key);  
+	    /***/
+	    boolean flushAll();  
+	    //KeyFuture getKeyFuture(String[] keys);
+	    String [] getNoneExistKeys(String[] keys);
+}
+

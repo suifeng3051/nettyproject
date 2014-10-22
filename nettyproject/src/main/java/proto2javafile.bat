@@ -1,0 +1,2 @@
+@echo off
+FOR %%p in (D:\WorkSpaceBonree\NettyDemo\src\main\java\NettyDemo\echo\protocalfiles\*.proto) do protoc.exe -I=D:\WorkSpaceBonree\NettyDemo\src\main\java\NettyDemo\echo\protocalfiles --java_out=.\ %%p

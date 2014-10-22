@@ -1,0 +1,18 @@
+package NettyDemo.echo.handler;
+
+import NettyDemo.echo.protocal.AddressBookProtos;
+import NettyDemo.echo.protocal.AddressBookProtos.AddressBook;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.handler.codec.http.HttpResponse;
+
+public class HttpProtobufClientHandler extends SimpleChannelInboundHandler<HttpResponse>{
+
+	@Override
+	protected void channelRead0(ChannelHandlerContext ctx, HttpResponse msg)
+			throws Exception {
+		System.out.println("client recieved msg:"+msg);
+		//AddressBook.parseFrom();
+	}
+
+}

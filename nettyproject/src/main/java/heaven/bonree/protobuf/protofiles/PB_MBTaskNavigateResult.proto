@@ -1,0 +1,60 @@
+message PB_MBTaskNavigateResult{
+	optional string    mid =1; 
+	optional uint32    monitorFun =2; //监测类型 2单元素，3全元素
+	optional string    url =3; //监测url
+	optional string    city =4; //监测点城市
+	optional string    netServiceName =5; //监测点运营商
+	optional string    monitorTime =6;//监测时间
+	optional string    ip =7;//监测点ip
+	optional string    dns =8;//经纬度
+	optional string    type =9;//监测点类型
+	optional string    netSpeed =10;//监测点宽带
+	optional string    cpuRate =11;//手机制式
+	optional string    procnum =12;//信号强度
+	optional string    errorid =13;//错误id
+	optional string    client_num =14;//客户端id
+	optional string    step2 =15;//DNS
+	optional string    step3 =16;//TCP
+	optional string    step13 =17;//SSL
+	optional string    step4 =18;//Request
+	optional string    step5 =19;//Response
+	optional string    step6 =20;//Redirect
+	optional string    step7 =21;//Doc Download
+	optional string    step8 =22;//Resources Download
+	optional string    dtime =23;//Time
+	optional string    firstTime =24;//First Screen
+	optional string    step9 =25;//First Byte
+	optional string    pageLoadeds =26;//Page Loaded 页面加载完成时间
+	optional string    domLoadeds =27;//Dom Loaded加载完成时间
+	optional string    downspeed =28;//页面整体速度
+	optional string    roundtrips =29;//网络Round Trips
+	optional string    step10 =30;//基础文档速度
+	optional string    dnsLookUps =31;//DNS查询总次数
+	optional string    step11 =32;//渲染速度
+	optional string    tcpConnects =33;//TCP建立连接总次数
+	optional string    bytesReceived =34;//下载总字节数
+	optional string    file_down =35;//基础文档下载字节数
+	optional string    file_size =36;//First Byte
+	optional string    header =37;//header
+	optional string    reqHeader =38;//REQ_HEADER
+	optional uint32    monitorSet8 =39; //（网页浏览：返回Header：0-不返回；1-返回基础文档Header；2-返回所有Header）
+	optional uint32    imgFlag =40;//错误快照开关 0-关
+	optional string    imgUrl =41;//缩略图url
+	optional uint32    checkImgUrl =42;//缩略图url连接是否有效标识符
+					//耗时元素图表和表格
+	optional uint32    slowFlag =43;//最耗时元素图表标识
+	optional string    chart1URL =44;//最耗时元素图表url
+	optional string    imagemap =45;//最耗时元素图表图片
+	
+	optional string    netenv =46;//网络
+				
+	optional string    docComplete =47;//文档下载完成用时
+	optional string    mtype =48;//访问入参mtype
+	optional string    nav_title =49;//页面详细元素瀑布图第一行
+	optional string    clientInfo =50;//页面详细元素瀑布图第二行
+	optional string    clientInfo1 =51;//页面详细元素瀑布图第三行
+	optional string    pictureUrl =52;//页面截图URL
+	optional string	   sourceUrl =53;//页面源码URL
+
+}	
+

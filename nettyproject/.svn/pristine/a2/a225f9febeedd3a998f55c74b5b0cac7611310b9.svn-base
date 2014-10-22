@@ -1,0 +1,93 @@
+package NettyDemo.echo.client;
+
+import java.io.IOException;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpHost;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.conn.params.ConnRoutePNames;
+import org.apache.http.entity.ByteArrayEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import NettyDemo.echo.protocal.AddressBookProtos;
+import NettyDemo.echo.server.HttpProtobufServer;
+
+public class HttpClientDemo {
+	public static void main(String[] args) throws ClientProtocolException,
+			IOException {
+		DefaultHttpClient httpclient = new DefaultHttpClient();
+		HttpHost proxy = new HttpHost(HttpProtobufServer.IP,
+				HttpProtobufServer.PORT);
+		httpclient.getParams().setParameter(ConnRoutePNames.DEFAULT_PROXY,
+				proxy);
+		HttpPost httppost = new HttpPost("http://www.java2000.net/login.jsp");
+		AddressBookProtos.AddressBook.Builder address = AddressBookProtos.AddressBook
+				.newBuilder();
+		for (int i = 0; i < 200; i++) {
+			AddressBookProtos.Person.Builder person = AddressBookProtos.Person
+					.newBuilder();
+			person.setName("HeavenWang");
+			person.setId(i);
+			person.setEmail("wanghouda@126.com");
+			address.addPerson(person);
+		}
+		ByteArrayEntity entity = new ByteArrayEntity(address.build().toByteArray());
+		httppost.setEntity(entity);
+		HttpResponse response = httpclient.execute(httppost);
+		HttpEntity receiveEntity = response.getEntity();
+		System.out.println("----------------------------------------");
+		System.out.println(response.getStatusLine());
+		if (receiveEntity != null) {
+			System.out.println("Response content length: " + receiveEntity.getContentLength());
+		}
+		System.out.println("success");
+		
+		/*DefaultHttpClient httpclient = new DefaultHttpClient();
+		// 代理的设置
+		HttpHost proxy = new HttpHost(HttpProtobufServer.IP,
+				HttpProtobufServer.PORT);
+		httpclient.getParams().setParameter(ConnRoutePNames.DEFAULT_PROXY,
+				proxy);
+		// 目标地址
+		HttpPost httppost = new HttpPost("http://www.java2000.net/login.jsp");
+		System.out.println("请求: " + httppost.getRequestLine());
+		// 构造最简单的字符串数据
+		AddressBookProtos.AddressBook.Builder address = AddressBookProtos.AddressBook
+				.newBuilder();
+
+		AddressBookProtos.Person.Builder person = AddressBookProtos.Person
+				.newBuilder();
+
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < 400; i++) {
+			sb.append("wanghouda");
+
+		}
+		person.setName(sb.toString());
+		person.setId(1);
+		StringBuilder sb2 = new StringBuilder();
+		for (int i = 0; i < 100; i++) {
+			sb2.append("wanghouda@126.com");
+
+		}
+		person.setEmail(sb2.toString());
+
+		address.addPerson(person);
+		//StringEntity entity=new StringEntity(address.toString());
+		
+		ByteArrayEntity entity=new ByteArrayEntity(address.build().toByteArray());
+		
+		httppost.setEntity(entity);
+			
+		// 执行
+		HttpResponse response = httpclient.execute(httppost);
+		HttpEntity entity2 = response.getEntity();
+		System.out.println("----------------------------------------");
+		System.out.println(response.getStatusLine());
+		if (entity2 != null) {
+			System.out.println("Response content length: "
+					+ entity2.getContentLength());
+		}
+		*/
+	}
+}

@@ -1,0 +1,23 @@
+package NettyDemo.echo.handler;
+
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.handler.codec.http.DefaultFullHttpRequest;
+import NettyDemo.echo.protocal.AddressBookProtos;
+
+public class HttpProtobufServerHandler extends SimpleChannelInboundHandler<Object>{
+
+	@Override
+	protected void channelRead0(ChannelHandlerContext ctx,	Object msg) throws Exception {
+
+		
+		DefaultFullHttpRequest request=(DefaultFullHttpRequest)msg;
+		//int length=request.content().array().length;
+		//System.out.println(length);
+		System.out.println("received http msg:"+AddressBookProtos.AddressBook.parseFrom(request.content().array()));
+		
+	}
+
+	
+
+}

@@ -1,0 +1,12 @@
+package NettyDemo.echo.protocal;
+option java_outer_classname = "AddressBookProtos";
+
+message AddressBook {
+  repeated Person person = 1;
+}
+
+message Person {
+  required string name = 1;
+  required int32 id = 2;
+  optional string email = 3;
+}

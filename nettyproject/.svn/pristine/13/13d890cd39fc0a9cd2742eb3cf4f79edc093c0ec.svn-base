@@ -1,0 +1,7 @@
+
+import	"PB_MBTaskNavigateResult.proto";
+import	"PB_MBTaskNetenvResult.proto";
+message PB_MBTaskResult{
+	optional	PB_MBTaskNavigateResult		navigateResult	=1;//
+	optional	PB_MBTaskNetenvResult		netenvResult	=2;//
+}

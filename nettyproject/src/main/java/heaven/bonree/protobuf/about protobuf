@@ -1,0 +1,5 @@
+1.protobuf编译
+protoc -I=$SRC_DIR --java_out=$DST_DIR $SRC_DIR/addressbook.proto 
+
+D:\WorkSpaceBonree\NettyDemo\src\main\java>protoc -I=./NettyDemo/bonree/protobuf/protofiles --java_out=./NettyDemo/bonree/protobuf/tasks ./NettyDemo/bonree/prot
+obuf/protofiles/*.proto

@@ -1,0 +1,7 @@
+message PB_TaskRequest{
+	repeated  string 	taskType	=1;//任务[查看参数详细说明]
+	required  string	username	=2;//用户名
+	required  string 	pwd			=3;//密码
+	repeated  string 	taskId		=4;//任务Id
+
+}

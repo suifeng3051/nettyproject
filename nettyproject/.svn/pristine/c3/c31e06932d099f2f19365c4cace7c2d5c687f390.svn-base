@@ -1,0 +1,61 @@
+package NettyDemo.bonree.service;
+
+import java.text.ParseException;
+import java.util.Map;
+
+import NettyDemo.bonree.DAO.MemcachedDAO;
+import NettyDemo.util.KeysUtils;
+
+
+/*******************************************************************************
+ * 版权信息：博睿宏远科技发展有限公司
+ * Copyright: Copyright (c) 2007博睿宏远科技发展有限公司,Inc.All Rights Reserved.
+ * 
+ * BidPlanStructForm.java Created on 2014-4-11
+ * Author: <a href=mailto:wanghd@bonree.com>王厚达</a>
+ * @Title: MBTaskResultBusiness.java
+ * @Package com.bonree.business
+ * Description:移动全元素测试结果业务类
+ * Version: 1.0
+ ******************************************************************************/
+public class MemcachedService {
+	//private final static Logger log = Logger.getLogger(Logger.class);
+	
+	/**注入DAO对象，查询数据库**/
+	private MemcachedDAO dao=new MemcachedDAO();
+	private MemcachedClientServiceImp service=new MemcachedClientServiceImp();
+
+	/**
+	 * 概述：获取移动全元素任务测试结果方法 
+	 * @Title: buildMBTaskResult
+	 * @param navTaskIdList
+	 * @return PB_MBTaskResult
+	 * @throws ParseException
+	 * @user <a href=mailto:wanghd@bonree.com>王厚达</a>
+	 */
+	public Map<String, Object> queryBusinessData(String tableName,String roleId,String timeformat) throws ParseException {
+		//缓存数据
+		memcacheData(tableName,roleId,timeformat);
+		//转换成keys
+		String[] keys=KeysUtils.parseParamToKeys(tableName,roleId,timeformat);
+		//从缓存提取数据
+		Map<String, Object> memcachedMap=service.getMulti(keys);
+		return memcachedMap;
+	}
+
+	private void memcacheData(String tableName, String roleId, String timeformat) {
+		//分解成keys
+		String [] keys=KeysUtils.parseParamToKeys(tableName,roleId,timeformat);
+		String [] noneExsitKeys=service.getNoneExistKeys(keys);
+		String [] sqlArray=KeysUtils.parseKeysToSQL(noneExsitKeys);
+		for(String sql:sqlArray){
+			Map<String, Object> dbData=dao.queryBusinessData(sql);
+		}
+		
+	}
+	
+	
+	
+	
+	
+}

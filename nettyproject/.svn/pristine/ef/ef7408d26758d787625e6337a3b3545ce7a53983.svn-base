@@ -1,0 +1,120 @@
+package NettyDemo.bonree.server;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.List;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpVersion;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ByteArrayEntity;
+import org.apache.http.impl.client.ContentEncodingHttpClient;
+import org.apache.http.params.CoreProtocolPNames;
+import org.apache.log4j.Logger;
+
+import NettyDemo.bonree.DAO.DataBusiness;
+
+/*******************************************************************************
+ * 版权信息：博睿宏远科技发展有限公司
+ * Copyright: Copyright (c) 2007博睿宏远科技发展有限公司,Inc.All Rights Reserved.
+ * 
+ * BidPlanStructForm.java Created on 2013-9-22
+ * Author: <a href=mailto:luojun@bonree.com>罗俊</a>
+ * @Title: DataServlet.java
+ * @Package com.bonree.servlet
+ * Description:
+ * Version: 1.0
+ ******************************************************************************/
+public class DataServlet extends HttpServlet {
+	private static final Logger log = Logger.getLogger(Logger.class);
+	public void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		response.setContentType("text/html");
+		PrintWriter out = response.getWriter();
+		out
+				.println("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">");
+		out.println("<HTML>");
+		out.println("  <HEAD><TITLE>A Servlet</TITLE></HEAD>");
+		out.println("  <BODY>");
+		out.print("    This is ");
+		out.print(this.getClass());
+		out.println(", using the GET method");
+		out.println("  </BODY>");
+		out.println("</HTML>");
+		out.flush();
+		out.close();
+	}
+
+	public void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		/*//PB_TaskResultRequest resultRequest  =   PB_TaskResultRequest.parseFrom(new BufferedInputStream(request.getInputStream()));
+		DataBusiness db = new DataBusiness();
+		//List<PB_PCTaskResponseInfo> pcList = resultRequest.getRInfoList();
+		//PB_TaskResultResponse.Builder builder = PB_TaskResultResponse.newBuilder();
+		//for(PB_PCTaskResponseInfo pcres : pcList){
+		//	PB_PCTaskResult.Builder pcbuilder = PB_PCTaskResult.newBuilder();
+		//	StringBuffer buff = new StringBuffer();
+			for(String statMainId : pcres.getNetenvTaskIdList()){
+				buff.append(statMainId).append(",");
+			}
+			log.info(buff);
+			if(!pcres.getNetenvTaskIdList().isEmpty()){
+				pcbuilder.addAllNetenvs(db.getNetData(pcres.getNetenvTaskIdList()));
+			}
+			if(!pcres.getNavTaskIdList().isEmpty()){
+				pcbuilder.addAllNavs(db.getNavData(pcres.getNavTaskIdList()));
+			}
+			builder.addPcResult(pcbuilder);
+		}
+		BufferedOutputStream out = null;
+		try{
+			out = new BufferedOutputStream(response.getOutputStream());
+			out.write(builder.build().toByteArray());
+		}finally{
+			if(out != null){
+				out.flush();
+				out.close();
+			}
+		}*/
+	}
+	
+	public static void main(String[] args) {
+
+		
+		
+	    String url = "http://fire.joinbr.com/OnlineTestServer/servlet/Data";
+//	    String url = "http://127.0.0.1/OnlineTestServer/servlet/Data";
+		HttpClient client = new ContentEncodingHttpClient();
+	    client.getParams().setParameter(CoreProtocolPNames.PROTOCOL_VERSION,
+	                                    HttpVersion.HTTP_1_1);
+
+	    HttpPost post = new HttpPost(url);
+	    //ByteArrayEntity entity = new ByteArrayEntity();
+	   // post.setEntity(entity);
+	    try {
+			HttpResponse httpResponse = client.execute(post);
+			//System.out.println("----"+res.toString());
+		} catch (ClientProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally{
+			post.releaseConnection();
+		}
+	
+	}
+
+}
+

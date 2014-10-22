@@ -1,0 +1,4 @@
+message PB_MBTaskResult{
+	optional	PB_MBTaskNavigateResult		navigateResult	=1;//
+	optional	PB_MBTaskNetenvResult		netenvResult	=2;//
+}

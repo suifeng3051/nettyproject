@@ -1,0 +1,294 @@
+package NettyDemo.bonree.DAO;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.log4j.Logger;
+
+import NettyDemo.bonree.domain.MBNavDataVo;
+import NettyDemo.bonree.protobuf.tasks.PBMBTaskNavigateResult.PB_MBTaskNavigateResult;
+import NettyDemo.bonree.protobuf.tasks.PBMBTaskNetenvResult.PB_MBTaskNetenvResult;
+import NettyDemo.bonree.protobuf.tasks.PBMBTaskNetenvResult.PB_TaskDnsResult;
+import NettyDemo.bonree.protobuf.tasks.PBMBTaskNetenvResult.PB_TaskIcmpResult;
+import NettyDemo.bonree.protobuf.tasks.PBMBTaskNetenvResult.PB_TaskTraceResult;
+import NettyDemo.util.StringUtils;
+
+/*******************************************************************************
+ * 版权信息：博睿宏远科技发展有限公司
+ * Copyright: Copyright (c) 2007博睿宏远科技发展有限公司,Inc.All Rights Reserved.
+ * 
+ * BidPlanStructForm.java Created on 2013-9-27
+ * Author: <a href=mailto:luojun@bonree.com>罗俊</a>
+ * @Title: DataBusiness.java
+ * @Package com.bonree.business
+ * Description:
+ * Version: 1.0
+ ******************************************************************************/
+public class QueryTestResultDAO {
+	private Map<Long,OnlineTestRole> onlineRoleMap = new HashMap<Long, OnlineTestRole>();
+	private final static Logger log = Logger.getLogger(Logger.class);
+	private final static String picUrl = "http://viewpic.bonree.com/";
+	private static StringBuffer picurlBuf = new StringBuffer();
+	private static String monitorTime = "";
+	private static Long mid;
+	private static SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+	/**查询online**/
+	private final static String onlineTestRoleSql = "select ID,MONITOR_FUN,NET_MON from t_mcc_onlinetestnew t where ";
+	private final static String netsql = "select STAT_MAIN_ID,C_CITYCODE,C_NETSERVICE_ID,C_DNS," +
+			"C_LAST_IP,DIG_ERRORID,A_SET,CNAME_SET,QUERY_TIME,QUERY_TIME,PING_ERRORID,PING_SERVERIP,PING_SET,PING_COUNT,DIG_SET,TRACERT_ERRORID,TRACERT_SERVERIP,TRACERT_COUNT,TRACERT_HOP_SET,TRACERT_TIME,CLIENT_NUM from t_mcc_stat_netenv where";
+	
+	private final static String navsql = "select STAT_NAVIGATE_ID,STAT_MAIN_ID,ROLE_ID,USERNAME,"
+			+ "ERRORID,REDIRECT,STEP1,STEP2,STEP3,STEP4,STEP5,STEP6,STEP7,STEP8,STEP9,STEP10,STEP11,"
+			+ "STEP12,FILE_SIZE,FILE_DOWN,to_char(MONITOR_TIME,'yyyy-mm-dd hh24:mi:ss') as MONITOR_TIME,"
+			+ "BYTES_RECEIVED,DNS_LOOK_UPS,ROUND_TRIPS,"
+			+ "TCP_CONNECTS,round(D_TIME*1000,0) as D_TIME,ROLE_IP,FIRST_TIME,ROLE_CITYCODE,ROLE_NETSERVICE,C_CITYCODE,"
+			+ "C_CITY,C_DISTRICT,C_NETSERVICE_ID,C_NETSERVICE_NAME,C_DNS,C_NETSPEED,C_CLIENT_TYPE,"
+			+ "C_LAST_IP,MIME_TYPE,HEADER,CPU_RATE,MEM_RATE,CYCLE_SPEED,ERRELE_FLAG,STEP13,PROCESS_NUM,"
+			+ "A1,A2,A3,A4,A5,A6,T1,T2,T3,T4,T5,T6,CLIENT_NUM,T_BLOCK_TIME,DOC_COMPLETE,IE_VERSION,"
+			+ "OS_VERSION,OS_VERSION,MONITOR_TIME_CODE,CLIENT_NUM from t_mcc_stat_navigate where ";
+	
+	public  List<PB_MBTaskNetenvResult> queryNetData(List<String> statMainIdList){
+		this.loadOnlineRoleMap(statMainIdList);
+		List<PB_MBTaskNetenvResult> list = new ArrayList<PB_MBTaskNetenvResult>();
+		Connection conn = null ;
+		ResultSet rs = null;
+		PreparedStatement ps = null;
+		try{
+			conn = BonreeTestDBUtil.getConnection(false);
+			ps = conn.prepareStatement(netsql + this.toOnlineWhere(statMainIdList));
+			rs = ps.executeQuery();
+			while(rs.next()){
+				OnlineTestRole role = onlineRoleMap.get(rs.getLong(1));
+				if(role == null){
+					continue;
+				}
+				PB_MBTaskNetenvResult.Builder net = PB_MBTaskNetenvResult.newBuilder();
+				/*net.setStatMainId(rs.getLong(1));
+				net.setCitycode(rs.getInt(2));
+				net.setNetserviceId(rs.getInt(3));
+				net.setDns(StringUtils.NullToEmpty(rs.getString(4)));
+				net.setIp(StringUtils.NullToEmpty(rs.getString(5)));
+				if(role.hasDns()){
+					PB_TaskDnsResult.Builder dns = PB_TaskDnsResult.newBuilder();
+					dns.setDigErrorId(rs.getInt(6));
+					dns.setASet(StringUtils.NullToEmpty(rs.getString(7)));
+					dns.setCname(StringUtils.NullToEmpty(rs.getString(8)));
+					dns.setQueryTimeMs(rs.getLong(9));
+					dns.setDnsDetail(StringUtils.NullToEmpty(rs.getString(10)));
+					net.setDnsResult(dns);
+				}
+				if(role.hasIcmp()){
+					PB_TaskIcmpResult.Builder icmp = PB_TaskIcmpResult.newBuilder();
+					icmp.setIcmpErrorId(rs.getInt(11));
+					icmp.setServerip(StringUtils.NullToEmpty(rs.getString(12)));
+					icmp.setIcmpTimeMs(rs.getLong(13));
+					icmp.setPingCount(rs.getInt(14));
+					icmp.setPingtimeoutCount(rs.getInt(15));
+					net.setIcmpResult(icmp);
+				}
+				if(role.hasTrace()){
+					PB_TaskTraceResult.Builder trace = PB_TaskTraceResult.newBuilder();
+					trace.setTraceErrorId(rs.getInt(16));
+					trace.setTraceip(StringUtils.NullToEmpty(rs.getString(17)));
+					trace.setTraceCount(rs.getInt(18));
+					trace.setTraceHopIps(StringUtils.NullToEmpty(rs.getString(19)));
+					trace.setTraceTimes(StringUtils.NullToEmpty(rs.getString(20)));
+					net.setTraceResult(trace);
+				}
+				net.setClientNum(rs.getLong(21));*/
+				net.setCitycode(1);
+				net.setClientNum(2);
+				net.setDns("dbx");
+				net.setIp("asdf");
+				net.setMonitorTime("asdfa");
+				net.setDnsResult(PB_TaskDnsResult.newBuilder().setCname("cname").setDnsDetail("dnsdetail").setDigErrorId(45));
+			
+				list.add(net.build());
+				
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+			log.error(e);
+		}finally{
+			BonreeTestDBUtil.close(rs);
+			BonreeTestDBUtil.close(ps);
+			BonreeTestDBUtil.close(conn);
+		}
+		
+		return list;
+	}
+	
+	public  List<PB_MBTaskNavigateResult> queryNavData(List<String> statMainIdList){
+		List<PB_MBTaskNavigateResult> list = new ArrayList<PB_MBTaskNavigateResult>();
+		Connection conn = null ;
+		ResultSet rs = null;
+		PreparedStatement ps = null;
+		try{
+			conn = BonreeTestDBUtil.getConnection(false);
+			ps = conn.prepareStatement(navsql + this.toOnlineWhere(statMainIdList));
+			rs = ps.executeQuery();
+			//while(rs.next()){
+				monitorTime = rs.getString("MONITOR_TIME");
+				mid = rs.getLong("STAT_MAIN_ID");
+				picurlBuf.setLength(0);
+				picurlBuf.append(picUrl).append(sf.format(sf.parse(monitorTime)).replace("-", "")).append("/");
+				picurlBuf.append(monitorTime.substring(monitorTime.indexOf(" ") + 1,monitorTime.indexOf(":")));
+				picurlBuf.append("/").append(mid).append("_0.gif");
+				PB_MBTaskNavigateResult.Builder nav = PB_MBTaskNavigateResult.newBuilder();
+				nav.setMid("mid");
+				nav.setCity("String.valueOf(rs.getInt(C_CITYCODE))");
+				nav.setNetServiceName("String.valueOf(rs.getInt(C_NETSERVICE_ID))");
+				nav.setDns("C_DNS");
+				nav.setIp("C_LAST_IP");
+				nav.setMonitorTime(monitorTime);
+				/*nav.setErrorid(rs.getInt("ERRORID"));
+				nav.setRedirect(rs.getInt("REDIRECT"));
+				nav.setDnstimeMs(rs.getLong("STEP2"));
+				nav.setTcptimeMs(rs.getLong("STEP3"));
+				nav.setSendtimeWs(rs.getLong("STEP4"));
+				nav.setResponsetimeMs(rs.getLong("STEP5"));
+				nav.setRedirectitimeMs(rs.getLong("STEP6"));
+				nav.setDowntimeMs(rs.getLong("STEP7"));
+				nav.setRenderingtimeMs(rs.getLong("STEP8"));
+				nav.setBaseSpeed(rs.getLong("STEP10"));
+				nav.setDownSpeed(rs.getLong("STEP12"));
+				nav.setFileSize(rs.getLong("FILE_SIZE"));
+				nav.setFileDown(rs.getLong("FILE_DOWN"));
+				nav.setTdownSize(rs.getLong("BYTES_RECEIVED"));
+				nav.setDnsLookUps(rs.getInt("DNS_LOOK_UPS"));
+				nav.setRoundTrips(rs.getInt("ROUND_TRIPS"));
+				nav.setTcpConnects(rs.getInt("TCP_CONNECTS"));
+				nav.setDTime(rs.getLong("D_TIME"));
+				nav.setRoleIp(rs.getString("ROLE_IP"));
+				nav.setFirstTimeMs(rs.getLong("FIRST_TIME"));
+				nav.setCycleSpeed(rs.getLong("CYCLE_SPEED"));
+				nav.setSsltimeMs(rs.getLong("STEP13"));
+				nav.setProcessNum(rs.getInt("PROCESS_NUM"));
+				nav.setAvgdnstimeMs(rs.getLong("A1"));
+				nav.setAvgtcptimeMs(rs.getLong("A2"));
+				nav.setAvgsendtimeWs(rs.getLong("A3"));
+				nav.setAvgresponsetimeMs(rs.getLong("A4"));
+				nav.setAvgdowntimeMs(rs.getLong("A5")); 
+				nav.setAvgssltimeMs(rs.getLong("A6"));
+				nav.setTydnstimeMs(rs.getLong("T1"));
+				nav.setTytcptimeMs(rs.getLong("T2"));
+				nav.setTysendtimeWs(rs.getLong("T3"));
+				nav.setTyresponsetimeMs(rs.getLong("T4"));
+				nav.setTydowntimeMs(rs.getLong("T5"));
+				nav.setTyssltimeMs(rs.getLong("T6"));
+				nav.setTyblocktimeMs(rs.getLong("T_BLOCK_TIME"));
+				nav.setDocCompleteMs(rs.getLong("DOC_COMPLETE"));
+				nav.setIeVersion(rs.getString("IE_VERSION"));
+				nav.setOsVersion(rs.getString("OS_VERSION"));
+				nav.setClientNum(rs.getLong("CLIENT_NUM"));*/
+				nav.setPictureUrl(picurlBuf.toString());
+				nav.setHeader(rs.getString("HEADER"));
+				list.add(nav.build());
+			//}
+		}catch (Exception e) {
+			e.printStackTrace();
+			log.error(e);
+		}finally{
+			BonreeTestDBUtil.close(rs);
+			BonreeTestDBUtil.close(ps);
+			BonreeTestDBUtil.close(conn);
+		}
+		
+		return list;
+	}
+	
+	private void loadOnlineRoleMap (List<String> statMainIdList){
+		String sql = onlineTestRoleSql + this.toOnlineRoleWhere(statMainIdList);
+		Connection conn = null ;
+		ResultSet rs = null;
+		PreparedStatement ps = null;
+		try{
+			conn = DBUtil.getConnection(false);
+			ps = conn.prepareStatement(sql);
+			rs = ps.executeQuery();
+			while(rs.next()){
+				long id = rs.getLong("ID");
+				int monitorFun = rs.getInt("MONITOR_FUN");
+				String netMon = rs.getString("NET_MON");
+				onlineRoleMap.put(id, new OnlineTestRole(id,monitorFun,netMon));
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+			log.error(e);
+		}finally{
+			DBUtil.close(rs);
+			DBUtil.close(ps);
+			DBUtil.close(conn);
+		}
+	}
+
+	
+	private String toOnlineWhere(List<String> statMainIdList){
+		String where = null;
+		for(String statMainId : statMainIdList){
+			if(where == null){
+				where = " (stat_main_id = " + statMainId;
+			}else{
+				where += " or stat_main_id = " + statMainId;
+			}
+		}
+		where += ")";
+		return where;
+	}
+	
+	private String toOnlineRoleWhere(List<String> statMainIdList){
+		String where = null;
+		for(String statMainId : statMainIdList){
+			if(where == null){
+				where = " (ID = " + statMainId;
+			}else{
+				where += " or ID = " + statMainId;
+			}
+		}
+		where += ")";
+		return where;
+	}
+	
+	public static void main(String[] args) {
+		QueryTestResultDAO dbb =  new QueryTestResultDAO();
+		List<String > ll = new ArrayList<String>();
+		ll.add("1588591401");
+		dbb.loadOnlineRoleMap(ll);
+	}
+	
+	private class OnlineTestRole{
+		private Long id;
+		private int monitorFun;
+		private String netMon;
+		OnlineTestRole(Long id,int monitorFun,String netMon){
+			this.id = id;
+			this.netMon = netMon;
+			this.monitorFun = monitorFun;
+		}
+		public Long getId() {
+			return id;
+		}
+		public int getMonitorFun() {
+			return monitorFun;
+		}
+		public String getNetMon() {
+			return netMon;
+		}
+		public boolean hasDns(){
+			return netMon != null && netMon.substring(0, 1).equals("1");
+		}
+		public boolean hasIcmp(){
+			return netMon != null && netMon.substring(1, 2).equals("1");
+		}
+		public boolean hasTrace(){
+			return netMon != null && netMon.substring(2, 3).equals("1");
+		}
+	}
+}
+

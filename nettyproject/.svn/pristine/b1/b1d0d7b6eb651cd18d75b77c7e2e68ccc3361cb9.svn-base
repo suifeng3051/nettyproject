@@ -1,0 +1,126 @@
+package NettyDemo.bonree.test;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpVersion;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ByteArrayEntity;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.ContentEncodingHttpClient;
+import org.apache.http.params.CoreProtocolPNames;
+import org.apache.log4j.Logger;
+
+import com.sun.org.apache.bcel.internal.classfile.PMGClass;
+
+import NettyDemo.bonree.DAO.DataBusiness;
+import NettyDemo.bonree.protobuf.tasks.PBMBTaskNetenvResult.PB_MBTaskNetenvResult;
+import NettyDemo.bonree.protobuf.tasks.PBMBTaskResult.PB_MBTaskResult;
+
+/*******************************************************************************
+ * 版权信息：博睿宏远科技发展有限公司 Copyright: Copyright (c) 2007博睿宏远科技发展有限公司,Inc.All Rights
+ * Reserved.
+ * 
+ * BidPlanStructForm.java Created on 2013-9-22 Author: <a
+ * href=mailto:luojun@bonree.com>罗俊</a>
+ * 
+ * @Title: DataServlet.java
+ * @Package com.bonree.servlet Description: Version: 1.0
+ ******************************************************************************/
+public class DataServlet extends HttpServlet {
+	private static final Logger log = Logger.getLogger(Logger.class);
+
+	public void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		response.setContentType("text/html");
+		PrintWriter out = response.getWriter();
+		out
+				.println("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">");
+		out.println("<HTML>");
+		out.println("  <HEAD><TITLE>A Servlet</TITLE></HEAD>");
+		out.println("  <BODY>");
+		out.print("    This is ");
+		out.print(this.getClass());
+		out.println(", using the GET method");
+		out.println("  </BODY>");
+		out.println("</HTML>");
+		out.flush();
+		out.close();
+	}
+
+	public void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		// PB_TaskResultRequest resultRequest =
+		// PB_TaskResultRequest.parseFrom(new
+		// BufferedInputStream(request.getInputStream()));
+		DataBusiness db = new DataBusiness();
+		String received=request.getInputStream().toString();
+		List<String> taskList = new ArrayList<String>();
+		taskList.add(received);
+		PB_MBTaskResult.Builder mbTaskbuilder = PB_MBTaskResult.newBuilder();
+
+		mbTaskbuilder.addAllNetenvResult(db.getNetData(taskList));
+		mbTaskbuilder.addAllNavigateResult(db.getNavData(taskList));
+
+		BufferedOutputStream out = null;
+		try {
+			out = new BufferedOutputStream(response.getOutputStream());
+			out.write(mbTaskbuilder.build().toByteArray());
+		} finally {
+			if (out != null) {
+				out.flush();
+				out.close();
+			}
+		}
+	}
+
+	public static void main(String[] args) throws UnsupportedEncodingException {
+
+		// PB_PCTaskValidateReq.Builder builder =
+		// PB_PCTaskValidateReq.newBuilder();
+		// PB_PCTaskResponseInfo.Builder rbu =
+		// PB_PCTaskResponseInfo.newBuilder();
+		// rbu.addNetenvTaskId("1821779698");
+		// rbu.addNavTaskId("1715976502");
+		// builder.addRInfo(rbu);
+		String url = "http://fire.joinbr.com/OnlineTestServer/servlet/Data";
+		// String url = "http://127.0.0.1/OnlineTestServer/servlet/Data";
+		HttpClient client = new ContentEncodingHttpClient();
+		client.getParams().setParameter(CoreProtocolPNames.PROTOCOL_VERSION,
+				HttpVersion.HTTP_1_1);
+
+		HttpPost post = new HttpPost(url);
+		StringEntity entity = new StringEntity("1821779698");
+		post.setEntity(entity);
+		try {
+			HttpResponse httpResponse = client.execute(post);
+			PB_MBTaskResult res = PB_MBTaskResult.parseFrom(httpResponse
+					.getEntity().getContent());
+			System.out.println("----" + res.toString());
+		} catch (ClientProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			post.releaseConnection();
+		}
+
+	}
+
+}

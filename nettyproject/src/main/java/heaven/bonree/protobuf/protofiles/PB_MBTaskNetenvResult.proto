@@ -1,0 +1,38 @@
+message PB_MBTaskNetenvResult{
+	optional	uint64	statMainId			=1;//唯一ID
+	optional	uint32	citycode			=2;//城市编码
+	optional	uint32	netserviceId		=3;//运营商编码
+	optional	string	dns					=4;//客户端dns
+	optional	string	ip					=5;//客户端IP
+	optional	string	monitorTime			=6;//监测时间
+	optional	PB_TaskDnsResult		dnsResult	=7;//dns结果
+	optional	PB_TaskIcmpResult		icmpResult	=8;//icmp结果
+	optional	PB_TaskTraceResult		traceResult	=9;//trace结果
+	optional	uint64	client_num		=10;//客户端唯一数字标识 
+	
+}
+//dns任务 结果
+message PB_TaskDnsResult{
+	optional	uint32	dig_errorId		=1;	//错误码；0--没有错误；其它为错误码；
+	optional	string	a_set			=2;//A地址
+	optional	string	cname			=3;//cname地址
+	optional	uint64	query_time_ms	=4;//dns查询时间	
+	optional	string	dns_detail		=5;//dns详细地址
+}
+//icmp任务 结果
+message PB_TaskIcmpResult{
+	optional	uint32	icmp_error_id		=1;//ICMP 	错误ID
+	optional	uint64	icmp_time_ms		=2;//ICMP 	超时时间，单位ms
+	optional	string	serverip			=3;//ICMP	目标IP
+	optional	uint32	ping_count			=4;//ICMP	次数
+	optional	uint32	pingtimeout_count	=5;//ICMP	超时次数
+}
+//trace任务 结果
+message PB_TaskTraceResult{
+	optional	uint32	trace_error_id		=1;//trace 错误ID
+	optional	string	traceip				=2;//trace ip
+	optional	uint32	trace_count			=3;//trace跳数
+	optional	string	trace_hop_ips		=4;//每次tracert的IP，多个是间用"|"隔开
+	optional	string	trace_times			=5;//每次TRACERT的时间，多个是间用"|"隔开，-1表示超时
+
+}

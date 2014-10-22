@@ -1,0 +1,60 @@
+﻿message PB_MBTaskNavigateResult{
+	optional string    mid 
+	optional uint32    monitorFun //监测类型 2单元素，3全元素
+	optional string    url //监测url
+	optional string    city //监测点城市
+	optional string    netServiceName //监测点运营商
+	optional string    monitorTime //监测时间
+	optional string    ip //监测点ip
+	optional string    dns //经纬度
+	optional string    type //监测点类型
+	optional string    netSpeed //监测点宽带
+	optional string    cpuRate //手机制式
+	optional string    procnum //信号强度
+	optional string    errorid //错误id
+	optional string    client_num //客户端id
+	optional string    step2 //DNS
+	optional string    step3 //TCP
+	optional string    step13 //SSL
+	optional string    step4 //Request
+	optional string    step5 //Response
+	optional string    step6 //Redirect
+	optional string    step7 //Doc Download
+	optional string    step8 //Resources Download
+	optional string    dtime //Time
+	optional string    firstTime //First Screen
+	optional  string    step9 //First Byte
+	optional  string    pageLoadeds //Page Loaded 页面加载完成时间
+	optional  string    domLoadeds //Dom Loaded加载完成时间
+	optional  string    downspeed //页面整体速度
+	optional  string    roundtrips //网络Round Trips
+	optional  string    step10 //基础文档速度
+	optional  string    dnsLookUps //DNS查询总次数
+	optional  string    step11 //渲染速度
+	optional  string    tcpConnects //TCP建立连接总次数
+	optional  string    bytesReceived //下载总字节数
+	optional  string    file_down //基础文档下载字节数
+	optional  string    file_size //First Byte
+	optional  string    header //header
+	optional  string    reqHeader //REQ_HEADER
+	optional  uint32 monitorSet8  //（网页浏览：返回Header：0-不返回；1-返回基础文档Header；2-返回所有Header）
+	optional  uint32 imgFlag //错误快照开关 0-关
+	optional  string    imgUrl //缩略图url
+	optional  boolean checkImgUrl //缩略图url连接是否有效标识符
+	//耗时元素图表和表格
+	optional  boolean slowFlag //最耗时元素图表标识
+	optional  string    chart1URL //最耗时元素图表url
+	optional  string    imagemap //最耗时元素图表图片
+	optional  List<ElementVo> element //最耗时元素图表表格
+	optional  XYChart slowXYChart //最耗时元素图片对象
+	//网络
+	optional  string    netenv 
+	//隐藏域数据
+	optional  string    docComplete //文档下载完成用时
+	optional  string    mtype //访问入参mtype
+	optional  string    nav_title //页面详细元素瀑布图第一行
+	optional  string    clientInfo //页面详细元素瀑布图第二行
+	optional  string    clientInfo1 //页面详细元素瀑布图第三行
+
+}	
+

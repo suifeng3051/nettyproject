@@ -1,0 +1,61 @@
+package NettyDemo.bonree.domain;
+
+/*******************************************************************************
+ * 版权信息：博睿宏远科技发展有限公司 
+ * Copyright: Copyright (c) 2007博睿宏远科技发展有限公司,Inc.All Rights Reserved.
+ * 
+ * BidPlanStructForm.java Created on Nov 21, 2012 
+ * Author: <a href=zhoujf@bonree.com>周峻峰</a>
+ * 
+ * @Title: ElementVo.java
+ * @Package com.bonree.report.vo 
+ * Description:最耗时元素图表
+ * Version: 1.0
+ ******************************************************************************/
+public class ElementVo {
+	private String url1;//元素名称
+	private String mime;//元素类型
+	private String p_size;//元素大小
+	private String load;//下载时间
+	private String chartURL;//最耗时元素名称连接
+	
+	public String getChartURL() {
+		return chartURL;
+	}
+
+	public void setChartURL(String chartURL) {
+		this.chartURL = chartURL;
+	}
+
+	public String getUrl1() {
+		return url1;
+	}
+
+	public void setUrl1(String url1) {
+		this.url1 = url1;
+	}
+
+	public String getMime() {
+		return mime;
+	}
+
+	public void setMime(String mime) {
+		this.mime = mime;
+	}
+
+	public String getP_size() {
+		return p_size;
+	}
+
+	public void setP_size(String p_size) {
+		this.p_size = p_size;
+	}
+
+	public String getLoad() {
+		return load;
+	}
+
+	public void setLoad(String load) {
+		this.load = load;
+	}
+}

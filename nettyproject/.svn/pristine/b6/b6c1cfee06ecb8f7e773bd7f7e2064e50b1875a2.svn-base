@@ -1,0 +1,52 @@
+package NettyDemo.util;
+
+import java.util.List;
+
+/*******************************************************************************
+ * 版权信息：博睿宏远科技发展有限公司
+ * Copyright: Copyright (c) 2007博睿宏远科技发展有限公司,Inc.All Rights Reserved.
+ * 
+ * BidPlanStructForm.java Created on 2014-4-16
+ * Author: <a href=mailto:wanghd@bonree.com>王厚达</a>
+ * @Title: KeysUtils.java
+ * @Package test.memcache.domain
+ * Description:
+ * Version: 1.0
+ ******************************************************************************/
+public class KeysUtils {
+	public String[] existKeyArray;
+	public String[] noneExistKeyArray;
+	
+	public static String[] parseSQLToKeys(String sql){
+		
+		return null;
+	}
+	public static String[] parseKeysToSQL(String[] keys){
+		
+		return null;
+	}
+	public String[] getExistKeyArray() {
+		return existKeyArray;
+	}
+	public void setExistKeyArray(String[] existKeyArray) {
+		this.existKeyArray = existKeyArray;
+	}
+	public String[] getNoneExistKeyArray() {
+		return noneExistKeyArray;
+	}
+	public void setNoneExistKeyArray(String[] noneExistKeyArray) {
+		this.noneExistKeyArray = noneExistKeyArray;
+	}
+	public static List<String> parseTimeToKeys(String timeStamp) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	public static String[] parseParamToKeys(String tableName, String roleId,
+			String timeformat) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+
+}
+

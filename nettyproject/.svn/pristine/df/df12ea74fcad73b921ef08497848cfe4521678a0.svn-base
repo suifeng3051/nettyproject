@@ -1,0 +1,54 @@
+message 	PB_MBTaskNavigateResult{
+	optional	uint64	statMainId			=1;//唯一ID
+	optional	uint32	citycode			=2;//城市编码
+	optional	uint32	netserviceId		=3;//运营商编码
+	optional	string	dns					=4;//客户端dns
+	optional	string	ip					=5;//客户端IP
+	optional	string	monitorTime			=6;//监测时间
+	optional	uint32	errorid			=7;
+	optional	uint32	redirect		=8;//URL重定称（0没有，1有）
+	optional	uint64	dnstime_ms		=9;//dns时间
+	optional	uint64	tcptime_ms		=10;//tcp时间
+	optional	uint64	sendtime_ws		=11;//发送时间
+	optional	uint64	responsetime_ms		=12;//响应时间
+	optional	uint64	redirectitime_ms	=13;//重定向时间
+	optional	uint64	downtime_ms			=14;//下载时间
+	optional	uint64	renderingtime_ms	=15;//渲染时间
+	optional	uint64	base_speed			=16;//基础文档下载速度bytes/s
+	optional	uint64	down_speed	=17;//下载速度
+	optional	uint64	file_size	=18;//基础文档实际大小（尺寸），单位：byte
+	optional	uint64	file_down	=19;//基础文档下载大小，单位：byte
+	optional	uint64	tdown_size	=20;//总下载字节数单位：byte
+	optional	uint32	dns_look_ups	=21;//dns次数
+	optional	uint32	round_trips		=22;//tcp连接的元素个数
+	optional	uint32	tcp_connects	=23;//tcp连接次数
+	optional	uint64	d_time		=24;//整体性能；单位毫秒 
+	optional	string	role_ip		=25;//基础文档目标IP
+	optional	uint64	first_time_ms	=26;//整体性能
+	optional	uint64	cycle_speed	=27;//周期平均速度bytes/s
+	optional	uint64	ssltime_ms	=28;//ssl时间
+	optional	uint32	process_num	=29;//进程数
+	optional	uint64	avgdnstime_ms		=30;//平均dns时间
+	optional	uint64	avgtcptime_ms		=31;//平均tcp时间
+	optional	uint64	avgsendtime_ws		=32;//平均发送时间
+	optional	uint64	avgresponsetime_ms		=33;//平均响应时间
+	optional	uint64	avgdowntime_ms			=34;//平均下载时间
+	optional	uint64	avgssltime_ms			=35;//平均ssl时间
+	optional	uint64	tydnstime_ms		=36;//投影dns时间
+	optional	uint64	tytcptime_ms		=37;//投影tcp时间
+	optional	uint64	tysendtime_ws		=38;//投影发送时间
+	optional	uint64	tyresponsetime_ms		=39;//投影响应时间
+	optional	uint64	tydowntime_ms			=40;//投影下载时间
+	optional	uint64	tyssltime_ms			=41;//投影ssl时间
+	optional	uint64	tyblocktime_ms			=42;//投影block时间
+	optional	uint64	doc_complete_ms	=43;//	（单位：ms）文档完成时间
+	optional	string	ie_version		=44;//ie版本
+	optional	string	os_version		=45;//操作系统版本	
+	optional	uint64	client_num		=46;//客户端唯一数字标识
+	optional	string	picture_url		=47;//页面截图URL
+	optional	string	header		=48;//HEADER 	
+	optional	uint32	role_id		=49;//任务id 
+	optional	string	source_url		=50;//页面源码url zip 
+
+}	
+
